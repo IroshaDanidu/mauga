@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PerFinAd ADMIN</title>
+    <title>Med-Dev ADMIN</title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -36,7 +36,7 @@
                     <i class="fas fa-laugh-wink"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">
-                    <img src="assets\images\logo4.png" alt="Logo" class="logo"> Perfinad
+                    <img src="https://media.istockphoto.com/id/1063818266/vector/caduceus-black-isolated-vector-icon-symbol-of-medicine-icon.jpg?s=612x612&w=0&k=20&c=sWIW3Bv_DKXsXdtdZR9Z8p-HlB51JXhR7pUKHoUn_2Y=" alt="Logo" class="logo"> Med-Dev
                 </div>
             </a>
 

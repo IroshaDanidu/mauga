@@ -5,7 +5,7 @@
 <x-admin-layout>
   <div class="container">
 
-  //create button
+ 
   <a href="{{ url('create') }}" class="btn btn-primary">Add Product</a>
  <!-- msg -->
   @if(session('success'))

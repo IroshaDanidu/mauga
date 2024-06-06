@@ -9,8 +9,6 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Orders;
 
-
-
 class OrderController extends Controller
 {
     public function saveOrder(Request $request)
@@ -30,12 +28,11 @@ class OrderController extends Controller
             'captcha' => 'required|string',
         ]);
 
-        // Calculate total price
         $cartItems = Cart::where('user_id', Auth::id())->get();
-        $grandTotal = 0;
+        $total = 0;
+
         foreach ($cartItems as $item) {
-            $totalItemPrice = $item->prod_price * $item->prod_qty;
-            $grandTotal += $totalItemPrice;
+            $total += $item->product->price * $item->quantity;
         }
 
         // Create the order with calculated total price
@@ -54,7 +51,7 @@ class OrderController extends Controller
         $order->payment_method = $request->payment_method;
         $order->captcha = $request->captcha;
         $order->status = 0;
-        $order->total = $grandTotal;
+        $order->total = $total;
 
         $order->save();
 
@@ -64,39 +61,31 @@ class OrderController extends Controller
                 OrderItems::create([
                     'order_id' => $order->id,
                     'prod_id' => $item->prod_id,
-                    'qty' => $item->prod_qty,
+                    'qty' => $item->quantity,
                     'price' => optional($item->product)->selling_price ?? 0,
                 ]);
+
+                $product = Product::where('id', $item->prod_id)->first();
+                if ($product) {
+                    $product->qty -= $item->quantity;
+                    $product->save();
+                }
             } else {
-                // Handle the case when prod_id is null
-            }
-
-
-            $product = Product::where('id', $item->prod_id)->first();
-            if ($product) {
-                $product->qty -= $item->prod_qty;
-                $product->save();
+                // Handle the case when prod_id is null (optional)
             }
         }
 
         // Update user details if authenticated
         if (Auth::check()) {
             $user = Auth::user();
-            // $user->title = $request->title;
             $user->name = $request->name;
-            // $user->phone = $request->phone;
-            // $user->address1 = $request->address1;
-            // $user->address2 = $request->address2;
-            // $user->city = $request->city;
-            // $user->state = $request->state;
-            // $user->zip = $request->zip;
-            // $user->country = $request->country;
             $user->save();
         }
 
+        // Clear the cart
         Cart::where('user_id', Auth::id())->delete();
 
-        return redirect()->back()->with('success', "Order Placed Successfully");
-
-        }
+        // Redirect to Stripe payment page
+        return redirect()->route('stripe.payment', ['id' => $order->id, 'total' => $order->total]);
+    }
 }

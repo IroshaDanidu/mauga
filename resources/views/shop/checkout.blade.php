@@ -1,6 +1,7 @@
 <x-shop-layout>
 
-    <section class="section section-bg" id="call-to-action" style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
+    <section class="section section-bg" id="call-to-action"
+        style="background-image: url(assets/images/banner-image-1-1920x500.jpg)">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -15,13 +16,11 @@
         </div>
     </section>
 
-
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
-
 
     <section class="section">
         <div class="container">
@@ -120,19 +119,21 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
-
                     <br>
                 </div>
 
                 <div class="col-md-4">
                     <ul class="list-group list-group-no-border">
+                        @php
+                            $total = 0;
+                        @endphp
 
-
-
-
-
+                        @foreach ($cartItem as $item)
+                            @php
+                                $total += $item->product->price * $item->quantity;
+                            @endphp
+                        @endforeach
 
                         <li class="list-group-item" style="margin:0 0 -1px">
                             <div class="row">
@@ -141,14 +142,11 @@
                                 </div>
 
                                 <div class="col-6">
-                                    <h4 class="text-right"> Rs. {{ $total }}</h4>
+                                    <h4><strong>{{ $total }}</strong></h4>
                                 </div>
                             </div>
                         </li>
-
-
                     </ul>
-
                     <br>
                 </div>
             </div>

@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Cart;
+use Illuminate\Support\Facades\Auth;
 
 
 class CheckoutController extends Controller
 {
     public function index(Request $request)
     {
-        $total = $request->input('total');
-        // Handle the checkout logic, such as displaying the checkout page with the total amount
-        return view('shop.checkout', compact('total'));
+
+        $cartItem = Cart::where('user_id', Auth::id())->get();
+        return view('shop.checkout', compact('cartItem'));
+
         }
 }

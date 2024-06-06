@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\StripeController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,7 +66,7 @@ Route::get('/admin', function () {
 
 //shop
 
-Route::GET('/sss', 'App\Http\Controllers\ProductController@index');
+Route::GET('/shop', 'App\Http\Controllers\ProductController@index');
 
 
 
@@ -109,3 +112,8 @@ Route::GET('/create', 'App\Http\Controllers\ProductController@ccc');
 use App\Http\Controllers\ProductController;
 
 Route::post('/store', [ProductController::class, 'store'])->name('product.store');
+
+
+Route::get('payment/{id}/{total}', [StripeController::class, 'session'])->name('stripe.payment');
+Route::get('success', [StripeController::class, 'success'])->name('success');
+Route::get('checkout', [StripeController::class, 'checkout'])->name('checkout');
